@@ -162,7 +162,7 @@ def identity_matrix():
     >>> numpy.allclose(I, numpy.identity(4, dtype=numpy.float64))
     True
     """
-    return numpy.identity(4, dtype=numpy.float64)
+    return numpy.identity(4, dtype=float)
 
 
 def translation_matrix(direction):
@@ -220,7 +220,7 @@ def reflection_from_matrix(matrix):
     >>> is_same_transform(M0, M1)
     True
     """
-    M = numpy.array(matrix, dtype=numpy.float64, copy=False)
+    M = numpy.array(matrix, dtype=float, copy=False)
     # normal: unit eigenvector corresponding to eigenvalue -1
     l, V = numpy.linalg.eig(M[:3, :3])
     i = numpy.where(abs(numpy.real(l) + 1.0) < 1e-8)[0]
@@ -250,7 +250,7 @@ def rotation_matrix(angle, direction, point=None):
     >>> R1 = rotation_matrix(-angle, -direc, point)
     >>> is_same_transform(R0, R1)
     True
-    >>> I = numpy.identity(4, numpy.float64)
+    >>> I = numpy.identity(4, float)
     >>> numpy.allclose(I, rotation_matrix(math.pi*2, direc))
     True
     >>> numpy.allclose(2., numpy.trace(rotation_matrix(math.pi/2,
@@ -263,18 +263,18 @@ def rotation_matrix(angle, direction, point=None):
     # rotation matrix around unit vector
     R = numpy.array(((cosa, 0.0,  0.0),
                      (0.0,  cosa, 0.0),
-                     (0.0,  0.0,  cosa)), dtype=numpy.float64)
+                     (0.0,  0.0,  cosa)), dtype=float)
     R += numpy.outer(direction, direction) * (1.0 - cosa)
     direction *= sina
     R += numpy.array((( 0.0,         -direction[2],  direction[1]),
                       ( direction[2], 0.0,          -direction[0]),
                       (-direction[1], direction[0],  0.0)),
-                     dtype=numpy.float64)
+                     dtype=float)
     M = numpy.identity(4)
     M[:3, :3] = R
     if point is not None:
         # rotation not around origin
-        point = numpy.array(point[:3], dtype=numpy.float64, copy=False)
+        point = numpy.array(point[:3], dtype=float, copy=False)
         M[:3, 3] = point - numpy.dot(R, point)
     return M
 
@@ -290,7 +290,7 @@ def rotation_from_matrix(matrix):
     >>> is_same_transform(R0, R1)
     True
     """
-    R = numpy.array(matrix, dtype=numpy.float64, copy=False)
+    R = numpy.array(matrix, dtype=float, copy=False)
     R33 = R[:3, :3]
     # direction: unit eigenvector of R33 corresponding to eigenvalue of 1
     l, W = numpy.linalg.eig(R33.T)
