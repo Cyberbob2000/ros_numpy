@@ -49,7 +49,7 @@ DUMMY_FIELD_PREFIX = '__'
 # mappings between PointField types and numpy types
 type_mappings = [(PointField.INT8, np.dtype('int8')), (PointField.UINT8, np.dtype('uint8')), (PointField.INT16, np.dtype('int16')),
                  (PointField.UINT16, np.dtype('uint16')), (PointField.INT32, np.dtype('int32')), (PointField.UINT32, np.dtype('uint32')),
-                 (PointField.FLOAT32, np.dtype('float32')), (PointField.FLOAT64, np.dtype('float64'))]
+                 (PointField.FLOAT32, np.dtype('float')), (PointField.FLOAT64, np.dtype('float'))]
 pftype_to_nptype = dict(type_mappings)
 nptype_to_pftype = dict((nptype, pftype) for pftype, nptype in type_mappings)
 
@@ -166,7 +166,7 @@ def merge_rgb_fields(cloud_arr):
 
     # not sure if there is a better way to do this. i'm changing the type of the array
     # from uint32 to float32, but i don't want any conversion to take place -jdb
-    rgb_arr.dtype = np.float32
+    rgb_arr.dtype = np.float
 
     # create a new array, without r, g, and b, but with rgb float32 field
     new_dtype = []
@@ -174,7 +174,7 @@ def merge_rgb_fields(cloud_arr):
         field_type, field_offset = cloud_arr.dtype.fields[field_name]
         if field_name not in ('r', 'g', 'b'):
             new_dtype.append((field_name, field_type))
-    new_dtype.append(('rgb', np.float32))
+    new_dtype.append(('rgb', np.float))
     new_cloud_arr = np.zeros(cloud_arr.shape, new_dtype)    
 
     # fill in the new array
